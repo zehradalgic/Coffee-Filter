@@ -89,32 +89,25 @@ function displayMenuItems(menuItems) {
 window.addEventListener("DOMContentLoaded", function () {
   displayMenuItems(menu);
 });
-
-// 1. Filtre butonlarını seçiyoruz
-const filterBtns = document.querySelectorAll(".px-6"); // Butonların ortak class'ını kullandık
+const filterBtns = document.querySelectorAll(".px-6");
 
 filterBtns.forEach(function (btn) {
   btn.addEventListener("click", function (e) {
-    // Tıklanan butonun içindeki yazıyı (Hepsi, Sıcak, Soğuk) alıyoruz
+    // Tıklanan butonun yazısını al ve küçük harfe çevir
     const category = e.currentTarget.innerText.toLowerCase();
-    
-    // Filtreleme mantığı
-    const menuCategory = menu.filter(function (menuItem) {
-      if (menuItem.category === category) {
-        return menuItem;
-      }
-    });
 
-    if (category === "hepsi") {
+    if (category === "all" || category === "hepsi") {
+      // Eğer 'All' seçildiyse hiçbir şeyi filtrelemeden tüm listeyi göster
       displayMenuItems(menu);
     } else {
-      // Eğer kategori "Sıcak" ise JS'de 'hot', "Soğuk" ise 'cold' diye eşleşmesi lazım
-      // Senin menünde category'ler "hot" ve "cold". Buton yazılarını buna göre kontrol edelim:
+      // Değilse, kategoriye göre filtrele (Sıcak -> hot, Soğuk -> cold eşleşmesi)
+      const targetCategory = category === "sıcak" || category === "hot" ? "hot" : "cold";
       
-      const turkishCategory = category === "sıcak" ? "hot" : category === "soğuk" ? "cold" : category;
+      const menuCategory = menu.filter(function (menuItem) {
+        return menuItem.category === targetCategory;
+      });
       
-      const filteredMenu = menu.filter(item => item.category === turkishCategory);
-      displayMenuItems(filteredMenu);
+      displayMenuItems(menuCategory);
     }
   });
 });
